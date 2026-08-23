@@ -14,13 +14,13 @@ let usuarios = [
     {
         id: 1,
         usuario: 'celso',
-        senha:'Mudar@2026',
+        senha:'$2b$10$AtpN9gJ.NPOhWjsvp7ySbunyQnHXMVNfjivOEi0of5xerGoN7Cbzm',
         perfil: 'admin'
     },
     {
         id: 2,
         usuario: 'mariana',
-        senha: 'Mudar@2026',
+        senha: '$2b$10$AtpN9gJ.NPOhWjsvp7ySbunyQnHXMVNfjivOEi0of5xerGoN7Cbzm',
         perfil: 'organizador'    
     }    
 ]
@@ -30,19 +30,34 @@ app.get ('/', (req,res) => {
         mensagem: 'API funcionando'
     })
 });
-app.post('/login', (req,res) => {
-    console.log(req.body);
+app.post('/login', async (req,res) => {
+    console.log(`Tentativa de login: ${req.body.usuario}`)
     const {usuario,senha} = req.body;
     const usuarioEncontrado = usuarios.find(
-        u=>u.usuario === usuario && u.senha === senha
-    );
-    console.log(usuarioEncontrado);
-    if (!usuarioEncontrado) {
-        return res.status(401).json({
-            valido:false,
-            mensagem: "Usuário ou senha incorretos!!"
-        });
-    }
+        u=>u.usuario === usuario );
+        if (!usuarioEncontrado){
+            console.log("Falha na tentativa de login.");
+            return res.status(401).json({
+                valido: false,
+                mensagem: "Usuário ou senha incorretos!!"
+            });
+        }
+        const senhaValida = await bcrypt.compare(
+            senha,
+            usuarioEncontrado.senha
+        );
+        if (!senhaValida) {
+            console.log("Falha na tentativa de login.");
+            return res.status(401).json({
+                valido: false,
+                mensagem: "Usuário ou senha incorretos",
+            });
+            res.json({
+                valido: true,
+                perfil: usuarioEncontrado.perfil
+            });
+        }
+    console.log("Login efetuado!");    
     console.log("enviando resposta");
     res.json({
         valido:true
