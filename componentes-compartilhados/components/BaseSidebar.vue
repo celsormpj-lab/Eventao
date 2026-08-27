@@ -25,10 +25,11 @@
 <style scoped>
 aside {
     position: fixed;
+    top: 160px;
     left: 0;
-    top: 130px;
     width: 240px;
     height: calc(100vh - 70px);
+    z-index: 900;
     background-color: #4b83b8;
 }
 nav {
@@ -50,8 +51,5 @@ nav a {
 }
 nav a:hover {
     background-color: #333;
-}
-nav a:hover {
-    background-color: #969292;
 }
 </style>

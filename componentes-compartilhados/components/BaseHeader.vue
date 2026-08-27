@@ -12,14 +12,14 @@
  import logo from '../assets/logo.png'
 </script>
 <style scoped>
-.header {
-  background-color: rgb(255, 255, 255);
-  display: flex;
-  height: 70px;
-  padding: 10px 0;
-  align-items: center;
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    z-index: 1000;
 }
-
 .logo {
   height: 165px;
 }
