@@ -23,6 +23,33 @@ let usuarios = [
         senha: '$2b$10$AtpN9gJ.NPOhWjsvp7ySbunyQnHXMVNfjivOEi0of5xerGoN7Cbzm',
         perfil: 'organizador'    
     }    
+];
+let eventos = [
+    {
+    id: 1,
+    nome: "workshop de Segurança",
+    data:"2026-19-10",
+    local:"não aplicavel",
+    tipo: "remoto",
+    endereco:"não aplicavel",
+    palestrante: "joao",
+    tema: "cyber-segurança",
+    horario: "19:30",
+    Descrição: "Expanda seu conhecimento em cybersegurança, com atividades práticas,pentests tutorados pelo grande especialista Joao!",
+    qtdadevagas: "20"
+    },
+    {
+        id: 2,
+        nome:"workshop de musculação",
+        data:"2026-20-10",
+        local:"Barra da tijuca",
+        tipo: "presencial",
+        palestrante:"Maçaranduba",
+        tema: "educação fisica",
+        horario: "10:00",
+        descrição: "venha vivenciar tecnicas de treinamento de musculação com o grande mestre Maçaranduba. O famoso treiandor de campeões!",
+        qtdadevagas: "15" 
+    }
 ]
 
 app.get ('/', (req,res) => {
@@ -85,7 +112,18 @@ app.post('/cadastro', (req,res)=>{
         valido:true,
         mensagem: "Usuário cadastrado com sucesso!!"
     })
-})
+});
+app.get("/eventos",(req,res) =>{
+    res.json(eventos);
+});
+app.post("/eventos",(req,res)=>{
+    const novoEvento =req.body;
+    eventos.push(novoEvento);
+    res.status(201).json({
+        mensagem:"Evento cadastrado com sucesso!",
+        evento: novoEvento
+    });
+});
 app.listen(3001,()=>{
     console.log('Servidor respondendo na porta 3001')
 });

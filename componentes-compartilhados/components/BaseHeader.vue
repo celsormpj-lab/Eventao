@@ -13,7 +13,7 @@
 </script>
 <style scoped>
 .header {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   display: flex;
   height: 70px;
   padding: 10px 0;

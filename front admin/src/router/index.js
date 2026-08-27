@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
-//import Dashboard from '../views/Dashboard.vue'
+import Dashboard from '../views/Dashboard.vue'
 //import Usuarios from '../views/Usuarios.vue'
-//import Eventos from '../views/Eventos.vue'
+import Eventos from '../views/Eventos.vue'
+import CadastroEvento from '../views/CadastroEvento.vue'
 //import Inscricoes from '../views/Inscricoes.vue'
 import Tapume from '../../../componentes-compartilhados/components/Tapume.vue'
 const routes = [
@@ -18,7 +19,7 @@ const routes = [
     {
     path: '/dashboard',
     name: 'dashboard',
-    component: Tapume,
+    component: Dashboard,
     meta: {
       requiresAuth: true
   }
@@ -34,7 +35,7 @@ const routes = [
   {
     path: '/eventos',
     name: 'eventos',
-    component: Tapume,
+    component: Eventos,
     meta: {
       requiresAuth: true
     }
@@ -43,6 +44,14 @@ const routes = [
     path: '/inscricoes',
     name: 'inscricoes',
     component: Tapume,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path:'/cadastro-eventos',
+    name: 'cadastro-eventos',
+    component: CadastroEvento,
     meta: {
       requiresAuth: true
     }
