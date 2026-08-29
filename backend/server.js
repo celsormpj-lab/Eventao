@@ -19,20 +19,6 @@ pool.query('SELECT NOW()', (err, result)=>{
 
 let proximoID = 3
 
-let usuarios = [
-    {
-        id: 1,
-        usuario: 'celso',
-        senha:'$2b$10$AtpN9gJ.NPOhWjsvp7ySbunyQnHXMVNfjivOEi0of5xerGoN7Cbzm',
-        perfil: 'admin'
-    },
-    {
-        id: 2,
-        usuario: 'mariana',
-        senha: '$2b$10$AtpN9gJ.NPOhWjsvp7ySbunyQnHXMVNfjivOEi0of5xerGoN7Cbzm',
-        perfil: 'organizador'    
-    }    
-];
 let eventos = [
     {
     id: 1,
