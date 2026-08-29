@@ -1,12 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
+import pool from './db.js';
 
 const app = express();
 const PORTA = 3001
 
 app.use(cors());
 app.use(express.json());
+
+pool.query('SELECT NOW()', (err, result)=>{
+    if (err) {
+        console.error('Erro ao conectar:', err);
+    } else {
+        console.log('PostgresSQL conectado', result.rows[0]);
+    }
+});
 
 let proximoID = 3
 
@@ -58,15 +67,19 @@ app.get ('/', (req,res) => {
     })
 });
 app.post('/login', async (req,res) => {
-    console.log(`Tentativa de login: ${req.body.usuario}`)
+    console.log(`Tentativa de login: ${req.body.usuario}`);
     const {usuario,senha} = req.body;
-    const usuarioEncontrado = usuarios.find(
-        u=>u.usuario === usuario );
-        if (!usuarioEncontrado){
+    try {
+        const resultado = await pool.query(
+            'SELECT * FROM usuarios WHERE usuario = $1',
+            [usuario]
+        );
+        const usuarioEncontrado = resultado.rows[0];
+        if (!usuarioEncontrado) {
             console.log("Falha na tentativa de login.");
             return res.status(401).json({
                 valido: false,
-                mensagem: "Usuário ou senha incorretos!!"
+                mensagem: "Usuario ou senha incorretos!!"
             });
         }
         const senhaValida = await bcrypt.compare(
@@ -77,19 +90,23 @@ app.post('/login', async (req,res) => {
             console.log("Falha na tentativa de login.");
             return res.status(401).json({
                 valido: false,
-                mensagem: "Usuário ou senha incorretos",
-            });
-            res.json({
-                valido: true,
-                perfil: usuarioEncontrado.perfil
+                mensagem: "Usuario ou senha incorretos!!"
             });
         }
-    console.log("Login efetuado!");    
-    console.log("enviando resposta");
-    res.json({
-        valido:true
-    });
-});
+        console.log("Login efetuado");
+        console.log("Enviando resposta");
+        res.json({
+            valido: true,
+            perfil: usuarioEncontrado.perfil
+        });
+    } catch(erro) {
+        console.error(" Erro ao consultar o banco", erro);
+        res.status(500).json({
+            valido: false,
+            mensagem: "Erro interno do servidor"
+        });
+    }
+});    
 app.post('/cadastro', (req,res)=>{
     const {usuario, senha} = req.body;
     const usuarioEncontrado = usuarios.find(
