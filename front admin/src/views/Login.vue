@@ -83,5 +83,6 @@ async function Entrar(){
   text-align: center;
   font-family: Arial, sans-serif;
   margin: 0;
+  padding-top: 160px;
 }
 </style>

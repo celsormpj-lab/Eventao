@@ -25,6 +25,7 @@ import BaseSidebar from '../../../componentes-compartilhados/components/BaseSide
 
 .dashboard-content {
     text-align: center;
+    padding-top: 160px;
 }
 BaseSidebar {}
 </style>

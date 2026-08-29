@@ -51,6 +51,7 @@ onMounted(carregarEventos)
     padding: 30px;
     min-height: 90%;
     font-family: Arial, sans-serif;
+    padding-top: 160px;
 }
 
 .dashboard-content {
