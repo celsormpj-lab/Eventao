@@ -92,29 +92,45 @@ app.post('/login', async (req,res) => {
             mensagem: "Erro interno do servidor"
         });
     }
-});    
-app.post('/cadastro', (req,res)=>{
-    const {usuario, senha} = req.body;
-    const usuarioEncontrado = usuarios.find(
-        u=>u.usuario === usuario
-    );
-    if (usuarioEncontrado) {
-        return res.status(409).json ({
-            valido:false,
-            mensagem:"Usuário ja existe!"
+}); 
+app.get('/usuarios', async (req, res)=> {
+    try {
+        const resultado = await pool.query(
+            'SELECT  id, usuario, email, perfil FROM usuarios ORDER by id'
+        );
+        res.json(resultado.rows);
+    }catch (erro) {
+        console.error("Erro ao consultar tabela", erro);
+        res.sendStatus(500).json({
+            mensagem: "Erro interno do servidor"
         });
     }
-    const novoUsuario = {
-        id: proximoID++,
-        usuario,
-        senha,
-        perfil
-    };
-    usuarios.push(novoUsuario);
-    res.json ({
-        valido:true,
-        mensagem: "Usuário cadastrado com sucesso!!"
-    })
+});   
+app.post('/cadastro', async (req, res)=> {
+    const {usuario, senha, email, perfil} = req.body;
+    try {
+        const resultado = await pool.query (
+            'SELECT * FROM usuarios WHERE usuario = $1',
+            [usuario] 
+        );
+        const usuarioEncontrado = resultado.rows[0];
+    if (usuarioEncontrado) {
+        return res.status(409).json ({
+            valido: false,
+            mensagem: "Usuário ja existe!"
+        });
+    }
+    await pool.query(
+        'INSERT INTO usuarios (usuario, senha, email, perfil) VALUES ($1, $2, $3, $4)',
+        [usuario, senha, email, perfil]
+    );
+    res.json({
+        valido: true,
+        mensagem: "Usuario cadastrado com sucesso!!"
+    });
+} catch (erro) {
+    console.error("erro ao cadastrar usuário", erro);
+}
 });
 app.get("/eventos",(req,res) =>{
     res.json(eventos);

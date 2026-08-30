@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
-//import Usuarios from '../views/Usuarios.vue'
+import usuarios from '../views/usuarios.vue'
+import Cadastrousuario from '../views/cadastroUser.vue'
 import Eventos from '../views/Eventos.vue'
 import CadastroEvento from '../views/CadastroEvento.vue'
 //import Inscricoes from '../views/Inscricoes.vue'
@@ -25,9 +26,14 @@ const routes = [
   }
   },
   {
+    path: '/cadastro-usuario',
+    name: 'cadastro-usuario',
+    component: Cadastrousuario  
+  },
+  {
     path: '/usuarios',
     name: 'usuarios',
-    component: Tapume,
+    component: usuarios,
     meta: {
       requiresAuth: true
     }
