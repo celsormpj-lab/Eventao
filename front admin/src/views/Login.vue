@@ -71,6 +71,7 @@ async function Entrar(){
         mensagem.value='';
         erro.value=false;
         localStorage.setItem("logado", "true");
+        localStorage.setItem('usuario', usuario.value);
         router.push("/dashboard");
     }
     catch(erro){

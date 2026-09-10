@@ -86,7 +86,7 @@ import BaseSelect from '../../../componentes-compartilhados/components/BaseSelec
 .cadastro {
     margin-left: 240px;
     padding-top: 70px;
-    padding-top: 160px;
+    padding-top: 80px;
 }
 
 .cadastro-content {

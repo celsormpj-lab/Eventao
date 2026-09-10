@@ -25,25 +25,36 @@ onMounted(carregarUsuarios)
         <BaseButtom @click="router.push('/cadastro-usuario')">+ Cadastrar Usuarios</BaseButtom>
         </div>
         <h2>Usuarios cadastrados:</h2>
-        <div class="usuarios-grid">
-            <article
+        <div class="usuarios-lista">
+            <div class="lista-cabecalho">
+            <span>Usuário</span>
+            <span>E-mail</span>
+            <span>Perfil</span>
+        </div>
+            <div
             v-for="usuario in usuarios"
             :key="usuario.id"
-            class="usuario-card"
+            class="usuario-item"
         >    
-        <h3>{{ usuario.usuario }}</h3>
-        <p>📧 {{ usuario.email }}</p>
-        <p>👤{{ usuario.perfil }}</p>
-            </article>
+        <span>{{ usuario.usuario }}</span>
+        <span> {{ usuario.email }}</span>
+        <span>{{ usuario.perfil }}</span>
+            </div>
         </div>
         </section>
     </main>
 </template>
 <style scoped>
+.usuarios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 .usuarios {
     margin-left: 240px;
     padding: 30px;
-    padding-top: 160px;
+    padding-top: 70px;
     min-height: 90%;
     font-family: Arial, sans-serif;
 }
@@ -51,31 +62,27 @@ onMounted(carregarUsuarios)
     width: 100%;
 }
 BaseSidebar{}
-.usuarios-grid {
-   display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px; 
+
+.usuarios-lista {
+    width: 100%
 }
-.usuario-card {
-    padding: 20px;
-    border-radius: 12px;
-     background: rgba(85, 77, 77, 0.8);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    color: #000;
-}
-.usuarios-header {
-    display: flex;
-    justify-content: space-between;
+.lista-cabecalho, 
+.usuario-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
     align-items: center;
-    margin-bottom: 20px;
 }
-article {
-    padding: 20px;
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
+.lista-cabecalho {
+    padding: 12px 20px;
+    font-weight: bold;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
 }
+.usuario-item {
+    padding: 16px 20px;
+    border-bottom:1px solid rgba(0, 0, 0, 0.12);
+}
+.usuario-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
 </style>

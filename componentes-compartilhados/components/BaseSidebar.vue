@@ -25,7 +25,7 @@
 <style scoped>
 aside {
     position: fixed;
-    top: 160px;
+    top: 60px;
     left: 0;
     width: 240px;
     height: calc(100vh - 70px);
