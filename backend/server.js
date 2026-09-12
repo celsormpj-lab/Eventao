@@ -131,11 +131,11 @@ app.post('/cadastro', async (req, res)=> {
     }
 }
     console.log("usuario disponivel. Gerando hash");
-    const senhaHah = await bcrypt.hash(senha, 10);
+    const senhaHash = await bcrypt.hash(senha, 10);
     console.log("gerando hash. Inserindo usuario no banco")
     await pool.query(
         'INSERT INTO usuarios (usuario, senha, email, perfil) VALUES ($1, $2, $3, $4)',
-        [usuario, senhaHah, email, perfil]
+        [usuario, senhaHash, email, perfil]
     );
     console.log("Usuario cadastrado com sucesso")
     res.json({

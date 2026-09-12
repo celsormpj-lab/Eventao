@@ -7,6 +7,7 @@ import Eventos from '../views/Eventos.vue'
 import CadastroEvento from '../views/CadastroEvento.vue'
 //import Inscricoes from '../views/Inscricoes.vue'
 import Tapume from '../../../componentes-compartilhados/components/Tapume.vue'
+import CadastroOrganizador from '../views/Cadastroorganizador.vue'
 const routes = [
   {
     path:'/',
@@ -61,7 +62,12 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  }
+  },
+  {
+  path:'/cadastro-organizador',
+  name: 'cadastro-organizador',
+  component: CadastroOrganizador
+  }  
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
