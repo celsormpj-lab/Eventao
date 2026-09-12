@@ -21,13 +21,29 @@ defineProps({
 const model = defineModel()
 </script>
 <style scoped>
+.input-container {
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 .input-container label {
     font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 5px;
+    font-weight: 100;
+    margin-bottom: 3px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 .base-input {
+    width: 100%;
+    height: 27px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.50);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: none;
+    outline: none;
     font-size: 14px;
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 </style>

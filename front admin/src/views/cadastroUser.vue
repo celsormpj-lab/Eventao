@@ -5,123 +5,108 @@ import BaseInput from '../../../componentes-compartilhados/components/BaseInput.
 import BaseInputForm from '../../../componentes-compartilhados/components/BaseInputForm.vue'
 import BaseSidebar from '../../../componentes-compartilhados/components/BaseSidebar.vue';
 import BaseSelect from '../../../componentes-compartilhados/components/BaseSelect.vue'
+import {ref} from 'vue'
+import BaseButtom from '../../../componentes-compartilhados/components/BaseButtom.vue';
+import BaseAlert from '../../../componentes-compartilhados/components/BaseAlert.vue';
+const API_URL = 'http://localhost:3001'
+const usuario = ref('');
+const senha = ref('');
+const email= ref('');
+const perfil= ref('');
+const mensagem= ref('');
+const confirmaSenha= ref ('');
+const erro = ref(false);
+async function cadastrarUsuario(){ 
+    if (!usuario.value || !senha.value || !email.value || !perfil.value) {
+        mensagem.value = ' Preencha todos os campos!';
+        erro.value = true;
+        return;
+    }
+    if (senha.value !== confirmaSenha.value){
+    mensagem.value = 'As senhas nao coincidem!';
+    erro.value = true;
+    return;
+}
+erro.value = false;
+    const resposta = await fetch (`${API_URL}/cadastro`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            usuario: usuario.value,
+            senha: senha.value,
+            email: email.value,
+            perfil: perfil.value
+        })
+    })
+    const resultado = await resposta.json()
+    if (resposta.ok){
+        mensagem.value = resultado.mensagem
+    }
+    else {
+        mensagem.value = resultado.mensagem
+        erro.value = true
+    }
+}
 </script>
 
 <template>
     <BaseHeader />
     <BaseSidebar />
     <main class="cadastro">
-        <section class="cadastro-content">
-        <h1>Cadastrar evento</h1>
-        <BaseForm @submit.prevent="cadastrarEvento">
+        <section class="cadastro-usuario">
+        <h1>Cadastrar usuários</h1>
+        <BaseForm @submit.prevent="cadastrarUsuario">
             <section class="form-section">
-                <h2>Informações do evento</h2>
             <BaseInputForm
-            v-model="nome"
-            label="Nome do evento"
-            type="text"
-            />
-            <section class="campo-duplo">
-            <BaseInputForm
-            v-model="tema"
-            label="Tema"
+            v-model="usuario"
+            label="Usuario: "
             type="text"
             />
             <BaseInputForm
-            v-model="palestrante"
-            label="Palestrante"
-            type="text"
+            v-model="senha"
+            label="Senha: "
+            type="password"
+            />
+            <BaseInputForm
+            v-model="confirmaSenha"
+            label="Digite novamente a senha: "
+            type="password"
+            />
+            <BaseInputForm
+            v-model="email"
+            label="E-mail: "
+            type="email"
+            />
+            <BaseSelect v-model="perfil" label="perfil">
+                <option value="admin">Administrador</option>
+                <option value="organizador">Organizador</option>
+                <option value="usuario">Usuario</option>  
+            </BaseSelect>    
+            <BaseButtom type="submit">
+                Cadastrar
+            </BaseButtom>
+            <BaseAlert
+            :mensagem="mensagem"
+            :erro="erro"
             />
             </section>
-            <BaseInputForm
-            v-model="descricao"
-            label="Descrição"
-            type="text"
-            />
-        </section>
-        <section class="detalhes-evento">
-            <h2>Detalhes</h2>
-            <section class="campo-duplo">
-            <BaseInputForm
-            v-model="data"
-            label="Data"
-            type="date"
-            />
-            <BaseInputForm
-            v-model="horario"
-            label="Horario"
-            type="time"
-            />
-            </section>
-            <BaseSelect label="Tipo">
-                <option value=""> Selecione o tipo</option>
-                <option value="presencial">Presencial</option>
-                <option value="remoto">Remoto</option>
-                <option value="Hibrido">Híbrido</option>
-            </BaseSelect>
-            <section class="campo-duplo">
-            <BaseInputForm
-            v-model="local"
-            label="Local"
-            type="text"
-            />
-            <BaseInputForm
-            v-model="endereco"
-            label="Endereço"
-            type="text"
-            />
-            </section>
-                <BaseInputForm
-                v-model="qtdadevagas"
-                label="Quantidade de vagas"
-                type="text"
-                />
-            </section>
-        </Baseform>
+        </BaseForm>
         </section>
     </main>
-
 </template>
 <style scoped>
 .cadastro {
-    margin-left: 240px;
-    padding-top: 70px;
-    padding-top: 160px;
+    margin-left:240px;
+    padding: 60px 30px 30px;
+    min-height:100vh;
+    box-sizing: border-box;
 }
-
-.cadastro-content {
+.cadastro-usuario {
     width: 90%;
-    max-width: 1000px;
+    max-width: 600px;
     margin: 0 auto;
-}
-.cadastro-content h1 {
     text-align: center;
-    margin: 0 0 30px;
-    font-size: 32px;
 }
-.form-section {
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(0, 0, 0, 0.15);
-}
-.form-section > * {
-    margin-bottom: 15px;
-}
-.campo-duplo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-.detalhes-evento {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(0, 0, 0, 0.15);
-}
-
-.detalhes-evento > * {
-    margin-bottom: 15px;
-}
-
-BaseSidebar {}
 </style>

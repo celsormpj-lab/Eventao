@@ -110,20 +110,34 @@ app.post('/cadastro', async (req, res)=> {
     const {usuario, senha, email, perfil} = req.body;
     try {
         const resultado = await pool.query (
-            'SELECT * FROM usuarios WHERE usuario = $1',
-            [usuario] 
+            'SELECT * FROM usuarios WHERE usuario = $1 OR email = $2',
+            [usuario, email] 
         );
         const usuarioEncontrado = resultado.rows[0];
-    if (usuarioEncontrado) {
+        if (usuarioEncontrado) {
+    if (usuarioEncontrado.usuario === usuario) {
+        console.log("cadastro recusado:usuario ja existe");
         return res.status(409).json ({
             valido: false,
             mensagem: "Usuário ja existe!"
         });
     }
+    if (usuarioEncontrado.email === email) {
+        console.log("cadastro recusado:email ja existe");
+        return res.status(409).json({
+            valido: false,
+            mensagem: "E-mail ja cadastrado!"
+        });
+    }
+}
+    console.log("usuario disponivel. Gerando hash");
+    const senhaHah = await bcrypt.hash(senha, 10);
+    console.log("gerando hash. Inserindo usuario no banco")
     await pool.query(
         'INSERT INTO usuarios (usuario, senha, email, perfil) VALUES ($1, $2, $3, $4)',
-        [usuario, senha, email, perfil]
+        [usuario, senhaHah, email, perfil]
     );
+    console.log("Usuario cadastrado com sucesso")
     res.json({
         valido: true,
         mensagem: "Usuario cadastrado com sucesso!!"

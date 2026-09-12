@@ -14,5 +14,7 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
+   background: rgba(0, 0, 0, 0.12);
+    border-radius: 25px;
 }
 </style>
