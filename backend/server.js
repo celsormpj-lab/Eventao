@@ -146,8 +146,32 @@ app.post('/cadastro', async (req, res)=> {
     console.error("erro ao cadastrar usuário", erro);
 }
 });
-app.get("/eventos",(req,res) =>{
-    res.json(eventos);
+app.get("/eventos", async(req, res) => {
+    try {
+        const resultado = await pool.query(
+            `SELECT
+            id,
+            nome_evento,
+            TO_CHAR(data, 'DD/MM/YYYY') AS data,
+            local,
+            tipo,
+            endereco,
+            palestrante,
+            tema,
+            TO_CHAR(horario, 'HH24:MI') AS horario,
+            descricao,
+            qtdvagas,
+            organizador_id
+            FROM eventos
+            ORDER BY id`
+        );
+        res.json(resultado.rows);
+    }catch(erro) {
+        console.error("Erro ao consultar eventos:", erro);
+        res.status(500).json({
+            mensagem: "Ero interno do servidor"
+        });
+    }
 });
 app.post("/eventos",(req,res)=>{
     const novoEvento =req.body;
