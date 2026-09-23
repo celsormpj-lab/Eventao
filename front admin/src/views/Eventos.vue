@@ -28,16 +28,16 @@ onMounted(carregarEventos)
         <div class="eventos-grid">
             <article
             v-for="evento in eventos"
-            :key="evento-id"
+            :key="evento.id"
             class=""evento-card
         >    
-        <h3>{{ evento.nome }}</h3>
+        <h3>{{ evento.nome_evento }}</h3>
         <p>📅 {{ evento.data }}</p>
-                <p>📍 {{ evento.local }}</p>
+                <p>📍 {{ evento.local || 'Evento remoto' }}</p>
                 <p>🌐 {{ evento.tipo }}</p>
                 <p>👤 {{ evento.palestrante }}</p>
                 <p>🎯 {{ evento.tema }}</p>
-                <p>🪑 {{ evento.qtdadevagas }} vagas</p>
+                <p>🪑 {{ evento.qtdvagas }} vagas</p>
                 <button>Ver evento</button>
                 </article>
         </div>
