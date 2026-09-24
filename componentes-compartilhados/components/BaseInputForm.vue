@@ -1,13 +1,21 @@
 <template>
   <div class="input-container">
     <label>{{ label }}</label>
+    <textarea
+      v-if="type ==='textarea'"
+      class="base-input base-textarea"
+      v-model="model"
+      :placeholder="placeholder"
+  ></textarea>
     <input
+      v-else
       class="base-input"
       :type="type"
       :placeholder="placeholder"
       v-model="model"
     >
   </div>
+  
 </template>
 <script setup>
 defineProps({
@@ -45,5 +53,11 @@ const model = defineModel()
     outline: none;
     font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
+}
+.base-textarea {
+  min-height: 140px;
+  height: 140px;
+  padding: 10px 12px;
+  resize: vertical;
 }
 </style>

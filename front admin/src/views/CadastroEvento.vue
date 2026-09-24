@@ -43,6 +43,7 @@ async function cadastrarEvento() {
         return;
     }
     erro.value = false;
+    mensagem.value = ('')
     const resposta = await fetch (`${API_URL}/eventos`,{
         method: 'POST',
         headers: {
@@ -63,11 +64,11 @@ async function cadastrarEvento() {
     })
     const resultado = await resposta.json()
     if (resposta.ok) {
-        erro.value= false,
+        erro.value= false;
         mensagem.value = resultado.mensagem
     }
     else {
-        erro.value = true,
+        erro.value = true;
         mensagem.value = resultado.mensagem
     }
 }
@@ -79,9 +80,11 @@ async function cadastrarEvento() {
     <main class="cadastro">
         <section class="cadastro-content">
         <h1>Cadastrar evento</h1>
-        <BaseForm @submit.prevent="cadastrarEvento">
+        <BaseForm 
+        class="form-evento"
+        @submit.prevent="cadastrarEvento">
             <section class="form-section">
-                <h2>Informações do evento</h2>
+                <h2>Informações básicas</h2>
             <BaseInputForm
             v-model="nome_evento"
             label="Nome do evento"
@@ -102,11 +105,11 @@ async function cadastrarEvento() {
             <BaseInputForm
             v-model="descricao"
             label="Descrição"
-            type="text"
+            type="textarea"
             />
         </section>
-        <section class="detalhes-evento">
-            <h2>Detalhes</h2>
+        <section class="form-section">
+            <h2>Data e horário</h2>
             <section class="campo-duplo">
             <BaseInputForm
             v-model="data"
@@ -119,6 +122,9 @@ async function cadastrarEvento() {
             type="time"
             />
             </section>
+        </section>
+            <section  class="form-section">
+            <h2>Modalidade</h2>
             <BaseSelect 
             v-model="tipo"
             label="Tipo"
@@ -128,7 +134,7 @@ async function cadastrarEvento() {
                 <option value="remoto">Remoto</option>
                 <option value="hibrido">Híbrido</option>
             </BaseSelect>
-            <section 
+        <section
             v-if="tipo === 'presencial' || tipo ==='hibrido'"
             class="campo-duplo">
             <BaseInputForm
@@ -142,11 +148,16 @@ async function cadastrarEvento() {
             type="text"
             />
             </section>
+        </section>
+            <section class="form-section">
+                <h2>Capacidade</h2>
                 <BaseInputForm
-                v-model="qtdvagas"
+                v-model.number="qtdvagas"
                 label="Quantidade de vagas"
                 type="number"
                 /> 
+            </section>
+<section>
              <BaseButtom type="submit"> Cadastrar </BaseButtom>
              <BaseAlert
              :mensagem="mensagem"
@@ -161,13 +172,13 @@ async function cadastrarEvento() {
 <style scoped>
 .cadastro {
     margin-left: 240px;
-    padding-top: 70px;
-    padding-top: 80px;
+    padding: 80px 40px 40px;
+    min-height: 100vh;
 }
 
 .cadastro-content {
-    width: 90%;
-    max-width: 1000px;
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
 }
 .cadastro-content h1 {
@@ -175,29 +186,64 @@ async function cadastrarEvento() {
     margin: 0 0 30px;
     font-size: 32px;
 }
-.form-section {
-    padding: 20px;
-    border-radius: 15px;
+/* Painel principal do formulário */
+:deep(form) {
+    padding: 30px 40px;
+    border-radius: 16px;
     background: rgba(0, 0, 0, 0.15);
 }
-.form-section > * {
+.form-section {
+    padding: 5px 0 15px;
     margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.form-section h2 {
+    margin: 0 0 15px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 10px;
 }
 .campo-duplo {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
-.detalhes-evento {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 15px;
+/* Área do botão e alerta */
+:deep(form > section:last-child) {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+/* Botão */
+:deep(button) {
+    min-width: 200px;
+}
+/* Responsividade */
+@media (max-width: 800px) {
+    .cadastro {
+        margin-left: 0;
+        padding: 80px 20px 30px;
+    }
+    .campo-duplo {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    :deep(form) {
+    padding: 25px 30px;
+    border-radius: 16px;
     background: rgba(0, 0, 0, 0.15);
 }
-
-.detalhes-evento > * {
-    margin-bottom: 15px;
 }
-
+:deep(.form-evento) {
+    width: 100%;
+    max-width: 1200px;
+    align-items: stretch;
+}
 BaseSidebar {}
 </style>
