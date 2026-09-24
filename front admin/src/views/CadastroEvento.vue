@@ -5,6 +5,72 @@ import BaseInput from '../../../componentes-compartilhados/components/BaseInput.
 import BaseInputForm from '../../../componentes-compartilhados/components/BaseInputForm.vue'
 import BaseSidebar from '../../../componentes-compartilhados/components/BaseSidebar.vue';
 import BaseSelect from '../../../componentes-compartilhados/components/BaseSelect.vue'
+import BaseButtom from '../../../componentes-compartilhados/components/BaseButtom.vue'
+import BaseAlert from '../../../componentes-compartilhados/components/BaseAlert.vue'
+import { ref } from 'vue'
+const mensagem = ref ('')
+const nome_evento = ref('')
+const tema= ref('')
+const palestrante = ref('')
+const descricao = ref('')
+const data = ref('')
+const horario = ref('')
+const tipo = ref('')
+const local = ref('')
+const endereco = ref('')
+const qtdvagas = ref<number | null>(null)
+const erro = ref(false)
+const API_URL = 'http://localhost:3001'
+
+async function cadastrarEvento() {
+    if (!nome_evento.value  ||
+        !tema.value ||
+        !palestrante.value || 
+        !descricao.value || 
+        !data.value || 
+        !horario.value || 
+        !tipo.value ||  
+        !qtdvagas.value) {
+        mensagem.value = " Preencha todos os campos!";
+        erro.value=true;
+        return
+    }
+    if (tipo.value !== 'remoto' &&
+        (!local.value || !endereco.value)
+    ) {
+        mensagem.value= 'Informe o local e o endereço do evento!';
+        erro.value = true;
+        return;
+    }
+    erro.value = false;
+    const resposta = await fetch (`${API_URL}/eventos`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            nome_evento: nome_evento.value,
+            tema: tema.value,
+            palestrante: palestrante.value,
+            descricao: descricao.value,
+            data: data.value,
+            horario: horario.value,
+            tipo: tipo.value,
+            local: local.value,
+            endereco: endereco.value,
+            qtdvagas: qtdvagas.value
+        })
+    })
+    const resultado = await resposta.json()
+    if (resposta.ok) {
+        erro.value= false,
+        mensagem.value = resultado.mensagem
+    }
+    else {
+        erro.value = true,
+        mensagem.value = resultado.mensagem
+    }
+}
 </script>
 
 <template>
@@ -17,7 +83,7 @@ import BaseSelect from '../../../componentes-compartilhados/components/BaseSelec
             <section class="form-section">
                 <h2>Informações do evento</h2>
             <BaseInputForm
-            v-model="nome"
+            v-model="nome_evento"
             label="Nome do evento"
             type="text"
             />
@@ -53,13 +119,18 @@ import BaseSelect from '../../../componentes-compartilhados/components/BaseSelec
             type="time"
             />
             </section>
-            <BaseSelect label="Tipo">
+            <BaseSelect 
+            v-model="tipo"
+            label="Tipo"
+            >
                 <option value=""> Selecione o tipo</option>
                 <option value="presencial">Presencial</option>
                 <option value="remoto">Remoto</option>
-                <option value="Hibrido">Híbrido</option>
+                <option value="hibrido">Híbrido</option>
             </BaseSelect>
-            <section class="campo-duplo">
+            <section 
+            v-if="tipo === 'presencial' || tipo ==='hibrido'"
+            class="campo-duplo">
             <BaseInputForm
             v-model="local"
             label="Local"
@@ -72,10 +143,15 @@ import BaseSelect from '../../../componentes-compartilhados/components/BaseSelec
             />
             </section>
                 <BaseInputForm
-                v-model="qtdadevagas"
+                v-model="qtdvagas"
                 label="Quantidade de vagas"
-                type="text"
-                />
+                type="number"
+                /> 
+             <BaseButtom type="submit"> Cadastrar </BaseButtom>
+             <BaseAlert
+             :mensagem="mensagem"
+             :erro="erro"
+             />   
             </section>
         </Baseform>
         </section>
